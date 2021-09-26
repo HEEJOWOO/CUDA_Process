@@ -18,12 +18,13 @@ struct cuComplex {
 
 int julia( int x, int y ) { 
     const float scale = 1.5;
-    float jx = scale * (float)(DIM/2 - x)/(DIM/2);
-    float jy = scale * (float)(DIM/2 - y)/(DIM/2);
+    float jx = scale * (float)(DIM/2 - x)/(DIM/2); //픽셀 좌표를 복소수 공간으로 변경
+    float jy = scale * (float)(DIM/2 - y)/(DIM/2); //픽셀 좌표를 복소수 공간으로 변경
 
-    cuComplex c(-0.8, 0.156);
+    cuComplex c(-0.8, 0.156); //줄리아 공식에 사용되는 상수 c에 대한 임의이 값, 조정가능
     cuComplex a(jx, jy);
 
+    // 줄리아 공식으로 판별 1000을 넘으면 0 안넘으면 1 반환
     int i = 0;
     for (i=0; i<200; i++) {
         a = a * a + c;
