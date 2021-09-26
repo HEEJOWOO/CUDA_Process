@@ -59,16 +59,16 @@ struct DataBlock {
 
 int main(void) {
                DataBlock   data;
-               CPUBitmap bitmap(DIM, DIM, &data);
-               unsigned char* dev_bitmap;
+               CPUBitmap bitmap(DIM, DIM, &data); //유틸리티 라이브러리를 이용하여 DIM x DIM 사이즈의 비트맵 이지미 생성
+               unsigned char* dev_bitmap; //디바이스에서 실행하기 위해 포인터 생성
 
-               HANDLE_ERROR(cudaMalloc((void**)&dev_bitmap, bitmap.image_size()));
+               HANDLE_ERROR(cudaMalloc((void**)&dev_bitmap, bitmap.image_size())); //데이터를 보관하기 위해 메모리 할당
                data.dev_bitmap = dev_bitmap;
 
                dim3 grid(DIM, DIM);
                kernel << <grid, 1 >> > (dev_bitmap);
 
-               cudaMemcpy(bitmap.get_ptr(), dev_bitmap, bitmap.image_size(), cudaMemcpyDeviceToHost);
+               cudaMemcpy(bitmap.get_ptr(), dev_bitmap, bitmap.image_size(), cudaMemcpyDeviceToHost); // kernel 실행 후 결과값을 다시호스트로 복사
 
                cudaFree(dev_bitmap);
 
